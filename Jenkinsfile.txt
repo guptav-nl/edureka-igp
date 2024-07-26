@@ -28,7 +28,8 @@ pipeline {
 
         stage('install podman using ansible'){
             steps {
-                sh 'ansible-playbook -i inventario_local.ini podman.yml'
+                sh 'ansible-playbook podman.yml -i inventario_local.ini --user=username \
+                              --extra-vars "ansible_sudo_pass=Whitecube@12"'
             }
         }
         stage('Build Docker Image'){
