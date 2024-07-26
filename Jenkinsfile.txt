@@ -41,7 +41,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'Whitecube@12', usernameVariable: 'vgupta')]) {
                         sh 'podman login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD docker.io'
                         sh 'podman push vgupta/abc_tech:$BUILD_NUMBER'
                         sh 'podman tag vgupta/abc_tech:$BUILD_NUMBER vgupta/abc_tech:latest'
