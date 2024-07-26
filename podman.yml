@@ -3,7 +3,7 @@
   hosts: local
   become: yes
   tasks:
-    - name: Instalar Podman
+    - name: Install Podman
       yum:
         name: podman
-        state: present
+        state: 
