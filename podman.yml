@@ -1,6 +1,6 @@
 ---
 - name: Install Podman on Amazon Linux
-  hosts: localhost
+  hosts: local
   become: true
   tasks:
     - name: Update all packages
