@@ -1,60 +1,9 @@
 ---
-- name: Install Docker on CentOS
-  hosts: localhost
-  become: true
-
+- name: Instalar Podman no RHEL
+  hosts: local
+  become: yes
   tasks:
-    - name: Gather Facts
-      ansible.builtin.setup:
-
-    - name: Update all packages
-      ansible.builtin.dnf:
-        name: "*"
-        state: latest
-
-    - name: Install required dependencies
-      ansible.builtin.dnf:
-        name:
-          - yum-utils
-          - device-mapper-persistent-data
-          - lvm2
+    - name: Instalar Podman
+      yum:
+        name: podman
         state: present
-
-    - name: Add Docker repository
-      ansible.builtin.yum_repository:
-        name: docker-ce-stable
-        description: Docker CE Stable - x86_64
-        baseurl: https://download.docker.com/linux/centos/docker-ce.repo
-        gpgcheck: yes
-        gpgkey: https://download.docker.com/linux/centos/gpg
-
-    - name: Clear the YUM cache
-      ansible.builtin.command:
-        cmd: yum clean all
-
-    - name: Clear the DNF cache
-      ansible.builtin.command:
-        cmd: dnf clean all
-
-    - name: Verify Docker repository
-      ansible.builtin.command:
-        cmd: yum repolist
-      register: yum_repolist
-
-    - name: Print yum repolist
-      ansible.builtin.debug:
-        var: yum_repolist.stdout_lines
-
-    - name: Install Docker
-      ansible.builtin.dnf:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-        state: present
-
-    - name: Start and enable Docker
-      ansible.builtin.systemd:
-        name: docker
-        enabled: yes
-        state: started
