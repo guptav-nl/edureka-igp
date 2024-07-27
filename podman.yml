@@ -1,6 +1,6 @@
 ---
 - name: Install Podman on Amazon Linux
-  hosts: local
+  hosts: localhost
   become: true
   tasks:
     - name: Update all packages
@@ -16,9 +16,9 @@
           - lvm2
         state: present
 
-    - name: Enable Amazon Extras repository
-      amazon-linux-extras:
-        name: epel
+    - name: Add EPEL repository
+      dnf:
+        name: epel-release
         state: present
 
     - name: Install Podman
