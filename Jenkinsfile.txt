@@ -25,41 +25,5 @@ pipeline {
                 sh 'mvn package'
             }
         }
-
-        stage('install podman using ansible'){
-            steps {
-                sh 'ansible-playbook podman.yml -i inventario_local.ini --user=username \
-                              --extra-vars "ansible_sudo_pass=Whitecube@12"'
-            }
-        }
-        stage('Build Docker Image'){
-            steps {
-                sh 'cp /var/lib/jenkins/workspace/$JOB_NAME/target/ABCtechnologies-1.0.war abc_tech.war'
-                sh 'podman build -t abc_tech:$BUILD_NUMBER .'
-                sh 'podman tag abc_tech:$BUILD_NUMBER vgupta/abc_tech:$BUILD_NUMBER'
-            }
-        }
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'Whitecube@12', usernameVariable: 'vgupta')]) {
-                        sh 'podman login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD docker.io'
-                        sh 'podman push vgupta/abc_tech:$BUILD_NUMBER'
-                        sh 'podman tag vgupta/abc_tech:$BUILD_NUMBER vgupta/abc_tech:latest'
-                        sh 'podman push vgupta/abc_tech:latest'
-                    }
-                }
-            }
-        }
-        stage('Deploy as container'){
-            steps {
-                sh 'podman run -itd -P vgupta/abc_tech:$BUILD_NUMBER'
-            }
-        }
-        stage('Deploy to kubernetes'){
-            steps {
-                sh 'ansible-playbook -i inventario_local.ini deployk8s.yml'
-            }
-        }
-    }
+}
 }
