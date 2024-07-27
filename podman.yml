@@ -1,12 +1,12 @@
 ---
 - name: Install Docker on CentOS
-  hosts: local
+  hosts: localhost
   become: true
 
   tasks:
     - name: Gather Facts
       ansible.builtin.setup:
-    
+
     - name: Update all packages
       ansible.builtin.dnf:
         name: "*"
@@ -19,12 +19,14 @@
           - device-mapper-persistent-data
           - lvm2
         state: present
-    
+
     - name: Add Docker repository
-      ansible.builtin.get_url:
-        url: https://download.docker.com/linux/centos/docker-ce.repo
-        dest: /etc/yum.repos.d/docker-ce.repo
-        mode: '0644'
+      ansible.builtin.yum_repository:
+        name: docker-ce-stable
+        description: Docker CE Stable - x86_64
+        baseurl: https://download.docker.com/linux/centos/7/x86_64/stable
+        gpgcheck: yes
+        gpgkey: https://download.docker.com/linux/centos/gpg
 
     - name: Clear the YUM cache
       ansible.builtin.command:
@@ -33,6 +35,15 @@
     - name: Clear the DNF cache
       ansible.builtin.command:
         cmd: dnf clean all
+
+    - name: Verify Docker repository
+      ansible.builtin.command:
+        cmd: yum repolist
+      register: yum_repolist
+
+    - name: Print yum repolist
+      ansible.builtin.debug:
+        var: yum_repolist.stdout_lines
 
     - name: Install Docker
       ansible.builtin.dnf:
