@@ -26,11 +26,7 @@ pipeline {
             }
         }
 
-        stage('install docker using ansible'){
-            steps {
-                sh 'ansible-playbook -K podman.yml -i inventario_local.ini -vvv'
-            }
-        }
+       
         stage('Build Docker Image'){
             steps {
                 sh 'cp /var/lib/jenkins/workspace/$JOB_NAME/target/ABCtechnologies-1.0.war abc_tech.war'
