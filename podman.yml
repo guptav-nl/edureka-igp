@@ -1,5 +1,5 @@
 ---
-- name: Install Podman on Amazon Linux
+- name: Install Docker on Amazon Linux
   hosts: local
   become: true
   tasks:
@@ -16,12 +16,27 @@
           - lvm2
         state: present
 
-    - name: Add EPEL repository
+    - name: Add Docker repository
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+
+    - name: Install Docker
       dnf:
-        name: epel-release
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
         state: present
 
-    - name: Install Podman
-      dnf:
-        name: podman
-        state: present
+    - name: Start Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add user to the docker group
+      user:
+        name: guptav-nl
+        groups: docker
+        append: true
