@@ -25,55 +25,6 @@ pipeline {
                 sh 'mvn package'
             }
         }
-
-stage('Prepare Workspace') {
-            steps {
-                script {
-                    sh '''
-                    # Move to the target directory
-                    cd /var/lib/jenkins/workspace/CI/target
-
-                    # Copy the WAR file to the workspace directory with a new name
-                    cp ABCtechnologies-1.0.war /var/lib/jenkins/workspace/CI/abc_tech.war
-                    '''
-                }
-            }
-        }
-stage('Build Docker Image') {
-            steps {
-                script {
-                    sh '''
-                    # Ensure Dockerfile is in the workspace directory
-                    cd /var/lib/jenkins/workspace/CI
-
-                    # List files to verify Dockerfile presence
-                    ls -l
-                    
-                    # Build the Docker image
-                    docker build -t abc_tech:$BUILD_NUMBER .
-                    docker tag abc_tech:$BUILD_NUMBER vguptag/abc_tech:$BUILD_NUMBER
-                    '''
-                }
-            }
-        }
-
-         stage('Push Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) 
-                    {
-                        sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD docker.io'
-                        sh 'docker push vguptag/abc_tech:$BUILD_NUMBER'
-                        sh 'docker tag vguptag/abc_tech:$BUILD_NUMBER vguptag/abc_tech:latest'
-                        sh 'docker push vguptag/abc_tech:latest'
-                    }
-                }
-            }
-        }
-        stage('Deploy as container'){
-            steps {
-                sh 'docker run -itd -P vguptag/abc_tech:$BUILD_NUMBER'
-            }
-        }
-    }
+    } 
 }
+
