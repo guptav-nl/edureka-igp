@@ -26,21 +26,41 @@ pipeline {
             }
         }
 
-       
-        stage('Build Docker Image'){
-            steps {
-                sh '''
-                    cd /var/lib/jenkins/workspace/$JOB_NAME/target
-                    cp ABCtechnologies-1.0.war /var/lib/jenkins/workspace/$JOB_NAME/abc_tech.war ''' 
-
-                sh 'docker build -t abc_tech:$BUILD_NUMBER .'
-                sh 'docker tag abc_tech:$BUILD_NUMBER vgupta/abc_tech:$BUILD_NUMBER'
-            }
-        }
-        stage('Push Docker Image') {
+stage('Prepare Workspace') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
+                    sh '''
+                    # Move to the target directory
+                    cd /var/lib/jenkins/workspace/CI/target
+
+                    # Copy the WAR file to the workspace directory with a new name
+                    cp ABCtechnologies-1.0.war /var/lib/jenkins/workspace/CI/abc_tech.war
+                    '''
+                }
+            }
+        }
+stage('Build Docker Image') {
+            steps {
+                script {
+                    sh '''
+                    # Ensure Dockerfile is in the workspace directory
+                    cd /var/lib/jenkins/workspace/CI
+
+                    # List files to verify Dockerfile presence
+                    ls -l
+
+                    # Build the Docker image
+                    docker build -t abc_tech:latest .
+                    '''
+                }
+            }
+        }
+
+         stage('Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) 
+                    {
                         sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD docker.io'
                         sh 'docker push vgupta/abc_tech:$BUILD_NUMBER'
                         sh 'docker tag vgupta/abc_tech:$BUILD_NUMBER vgupta/abc_tech:latest'
