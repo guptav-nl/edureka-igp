@@ -50,7 +50,7 @@ stage('Build Docker Image') {
                     ls -l
                     
                     # Build the Docker image
-                    docker build -t abc_tech:$BUILD_NUMBER
+                    docker build -t abc_tech:$BUILD_NUMBER .
                     docker tag abc_tech:$BUILD_NUMBER vgupta/abc_tech:$BUILD_NUMBER
                     '''
                 }
