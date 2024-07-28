@@ -30,7 +30,7 @@ pipeline {
         stage('Build Docker Image'){
             steps {
                 sh '''
-cd /var/lib/jenkins/workspace/$JOB_NAME/target/
+cd /var/lib/jenkins/workspace/$JOB_NAME/target
 cp ABCtechnologies-1.0.war /var/lib/jenkins/workspace/$JOB_NAME/abc_tech.war
 
                 sh 'docker build -t abc_tech:$BUILD_NUMBER .'
