@@ -48,11 +48,11 @@ stage('Build Docker Image') {
 
                     # List files to verify Dockerfile presence
                     ls -l
-                        '''
-                    # Build the Docker image
-                    sh 'docker build -t abc_tech:$BUILD_NUMBER .'
-                    sh 'docker tag abc_tech:$BUILD_NUMBER vgupta/abc_tech:$BUILD_NUMBER'
                     
+                    # Build the Docker image
+                    docker build -t abc_tech:$BUILD_NUMBER
+                    docker tag abc_tech:$BUILD_NUMBER vgupta/abc_tech:$BUILD_NUMBER
+                    '''
                 }
             }
         }
