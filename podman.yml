@@ -1,9 +1,9 @@
 ---
-- name: Instalar Podman on ubuntu
+- name: Instalar docker on ubuntu
   hosts: local
   become: yes
   tasks:
-    - name: Instalar Podman
+    - name: Instalar docker
       yum:
-        name: podman
+        name: docker
         state: present
