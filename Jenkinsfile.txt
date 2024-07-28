@@ -51,7 +51,7 @@ stage('Build Docker Image') {
                     
                     # Build the Docker image
                     docker build -t abc_tech:$BUILD_NUMBER .
-                    docker tag abc_tech:$BUILD_NUMBER vgupta/abc_tech:$BUILD_NUMBER
+                    docker tag abc_tech:$BUILD_NUMBER vguptag/abc_tech:$BUILD_NUMBER
                     '''
                 }
             }
@@ -63,16 +63,16 @@ stage('Build Docker Image') {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) 
                     {
                         sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD docker.io'
-                        sh 'docker push vgupta/abc_tech:$BUILD_NUMBER'
-                        sh 'docker tag vgupta/abc_tech:$BUILD_NUMBER vgupta/abc_tech:latest'
-                        sh 'docker push vgupta/abc_tech:latest'
+                        sh 'docker push vguptag/abc_tech:$BUILD_NUMBER'
+                        sh 'docker tag vguptag/abc_tech:$BUILD_NUMBER vguptag/abc_tech:latest'
+                        sh 'docker push vguptag/abc_tech:latest'
                     }
                 }
             }
         }
         stage('Deploy as container'){
             steps {
-                sh 'docker run -itd -P vgupta/abc_tech:$BUILD_NUMBER'
+                sh 'docker run -itd -P vguptag/abc_tech:$BUILD_NUMBER'
             }
         }
     }
