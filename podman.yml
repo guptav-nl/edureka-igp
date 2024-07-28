@@ -4,6 +4,6 @@
   become: yes
   tasks:
     - name: Instalar docker
-      yum:
+      apt:
         name: docker
         state: present
