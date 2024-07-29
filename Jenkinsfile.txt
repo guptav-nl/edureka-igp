@@ -77,5 +77,10 @@ pipeline {
 >>>>>>> 420c7f9b6f7f9085dbf968e451b4436f33e9d2d2
             }
         }
+stage('Deploy to kubernetes'){
+            steps {
+                sh 'ansible-playbook -i inventario_local.ini deployk8s.yml'
+            }
+        }
     }
 }
