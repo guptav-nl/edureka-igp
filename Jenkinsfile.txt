@@ -26,33 +26,55 @@ pipeline {
             }
         }
 
+<<<<<<< HEAD
         stage('install podman using ansible'){
             steps {
                 sh 'ansible-playbook -i inventario_local.ini podman.yml'
+=======
+        stage('install docker using ansible'){
+            steps {
+                sh 'ansible-playbook --ask-become-pass podman.yml -i inventario_local.ini -vvv'
+>>>>>>> 420c7f9b6f7f9085dbf968e451b4436f33e9d2d2
             }
         }
         stage('Build Docker Image'){
             steps {
                 sh 'cp /var/lib/jenkins/workspace/$JOB_NAME/target/ABCtechnologies-1.0.war abc_tech.war'
+<<<<<<< HEAD
                 sh 'podman build -t abc_tech:$BUILD_NUMBER .'
                 sh 'podman tag abc_tech:$BUILD_NUMBER vgupta/abc_tech:$BUILD_NUMBER'
+=======
+                sh 'docker build -t abc_tech:$BUILD_NUMBER .'
+                sh 'docker tag abc_tech:$BUILD_NUMBER vguptag/abc_tech:$BUILD_NUMBER'
+>>>>>>> 420c7f9b6f7f9085dbf968e451b4436f33e9d2d2
             }
         }
         stage('Push Docker Image') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
+<<<<<<< HEAD
                         sh 'podman login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD docker.io'
                         sh 'podman push vgupta/abc_tech:$BUILD_NUMBER'
                         sh 'podman tag vgupta/abc_tech:$BUILD_NUMBER vgupta/abc_tech:latest'
                         sh 'podman push vgupta/abc_tech:latest'
+=======
+                        sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD docker.io'
+                        sh 'docker push vguptag/abc_tech:$BUILD_NUMBER'
+                        sh 'docker tag vguptag/abc_tech:$BUILD_NUMBER vguptag/abc_tech:latest'
+                        sh 'docker push vguptag/abc_tech:latest'
+>>>>>>> 420c7f9b6f7f9085dbf968e451b4436f33e9d2d2
                     }
                 }
             }
         }
         stage('Deploy as container'){
             steps {
+<<<<<<< HEAD
                 sh 'podman run -itd -P vgupta/abc_tech:$BUILD_NUMBER'
+=======
+                sh 'docker run -itd -P vguptag/abc_tech:$BUILD_NUMBER'
+>>>>>>> 420c7f9b6f7f9085dbf968e451b4436f33e9d2d2
             }
         }
     }
