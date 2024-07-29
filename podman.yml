@@ -1,14 +1,4 @@
 ---
-<<<<<<< HEAD
-- name: Instalar Podman no RHEL
-  hosts: local
-  become: yes
-  tasks:
-    - name: Instalar Podman
-      yum:
-        name: podman
-        state: present
-=======
 - name: Install Docker on Ubuntu
   hosts: localhost
   become: yes
@@ -50,5 +40,3 @@
         name: docker
         state: started
         enabled: yes
-
->>>>>>> 420c7f9b6f7f9085dbf968e451b4436f33e9d2d2
