@@ -56,30 +56,12 @@ pipeline {
             }
         }
 
-        environment {
-        ANSIBLE_CONFIG = "${WORKSPACE}/ansible.cfg"
-    }
-
-    stages {
-        stage('Setup Kubernetes') {
+       stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    ansiblePlaybook(
-                        playbook: 'setup_kubernetes.yml'
-                    )
-                }
-            }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    ansiblePlaybook(
-                        playbook: 'deploy_k8s.yml'
-                    )
-                }
-            }
-        }
+                    sh 'kubectl apply -f k8/deployment.yml'
+                    sh 'kubectl apply -f k8/service.yml
+}}}
     
     }
 }
