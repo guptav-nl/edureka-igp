@@ -1,0 +1,29 @@
+---
+- name: Setup Kubernetes Cluster
+  hosts: local
+  gather_facts: no
+  tasks:
+    - name: Install Kubernetes packages
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+
+    - name: Initialize Kubernetes master
+      command: kubeadm init
+      when: inventory_hostname == 'kube-master'
+
+    - name: Set up kubeconfig
+      copy:
+        content: |
+          export KUBECONFIG=/etc/kubernetes/admin.conf
+        dest: /home/ubuntu/.kube/config
+        mode: '0600'
+      when: inventory_hostname == 'kube-master'
+
+    - name: Install CNI plugin (Flannel)
+      become: yes
+      command: kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+      when: inventory_hostname == 'kube-master'
