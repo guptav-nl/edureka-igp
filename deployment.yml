@@ -5,15 +5,15 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: abc_deploy
+      app: my-profile
   replicas: 3
   template:
     metadata:
       labels:
-        app: abc_deploy
+        app: my-profile
     spec:
       containers:
-      - name: abc-app
+      - name: my-profile
         image: vguptag/abc_tech:latest
         ports:
         - containerPort: 8080
