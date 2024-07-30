@@ -1,9 +1,7 @@
 pipeline {
     agent any
-environment {
-        KUBECONFIG = '/var/lib/jenkins/.kube/config'
-}
-    stages {
+
+stages {
         stage('Code Checkout') {
             steps {
                 git 'https://github.com/guptav-nl/edureka-igp.git'
@@ -57,13 +55,5 @@ environment {
                  sh 'docker run -itd -P vguptag/abc_tech:$BUILD_NUMBER'
             }
         }
-
-       stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    sh 'kubectl apply -f deployment.yml'
-                    sh 'kubectl apply -f service.yml
-}}}
-    
     }
 }
