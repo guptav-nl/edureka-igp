@@ -55,5 +55,31 @@ pipeline {
                  sh 'docker run -itd -P vguptag/abc_tech:$BUILD_NUMBER'
             }
         }
+
+        environment {
+        ANSIBLE_CONFIG = "${WORKSPACE}/ansible.cfg"
+    }
+
+    stages {
+        stage('Setup Kubernetes') {
+            steps {
+                script {
+                    ansiblePlaybook(
+                        playbook: 'setup_kubernetes.yml'
+                    )
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    ansiblePlaybook(
+                        playbook: 'deploy_k8s.yml'
+                    )
+                }
+            }
+        }
+    
     }
 }
