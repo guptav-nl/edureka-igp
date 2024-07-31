@@ -5,15 +5,15 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: my-profile
+      app: IGP2
   replicas: 3
   template:
     metadata:
       labels:
-        app: my-profile
+        app: IGP2
     spec:
       containers:
-      - name: my-profile
+      - name: IGP2
         image: vguptag/abc_tech:latest
         ports:
         - containerPort: 8080
